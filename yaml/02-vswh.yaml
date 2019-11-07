@@ -1,0 +1,238 @@
+---
+# Source: vault-secrets-webhook/templates/webhook-pdb.yaml
+
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: release-name-vault-secrets-webhook
+  namespace: vswh
+  labels:
+    helm.sh/chart: vault-secrets-webhook-0.5.5
+    app.kubernetes.io/name: release-name-vault-secrets-webhook
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/component: mutating-webhook
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vault-secrets-webhook
+      app.kubernetes.io/instance: release-name
+
+---
+# Source: vault-secrets-webhook/templates/apiservice-webhook.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: release-name-vault-secrets-webhook
+  namespace: vswh
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURpakNDQW5LZ0F3SUJBZ0lSQUtMNnJFUWxVdFpnYkVDRzJuSlI0QkF3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2MzWmpMV05oZEMxallUQWVGdzB4T1RFeE1EWXhOakF6TVRsYUZ3MHlNREV4TURVeApOakF6TVRsYU1EWXhOREF5QmdOVkJBTVRLM0psYkdWaGMyVXRibUZ0WlMxMllYVnNkQzF6WldOeVpYUnpMWGRsClltaHZiMnN1ZG5OM2FDNXpkbU13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQzkKa0IyVDFlYkRkRHBteThSWCtXZUpXV3pNTFN5T092VkR0Z3p3VVVtTmRCbHRab3ZNZ3JwQzg5a3ZxVFJGMHRhYwpaVUI0Z2wzc3RQY3BNMWlkMDRHMnJEOWU4NEs3alhId0ZvSjNYUm5sb3dQS3FPRElBU1hTSlR2Z2xFWkVOSHVOCmpZTnhPMG9yeWVuVjRyMkxOMHRGRnlBNjJ3TDFYVHluWHMzbGtwRlBSR0VkcU9sRlFHSUZEQjN6cUx6WTByNTAKYTR1bEwrQktkYWZGQXZXNVBmK000YzF3MCtjT2dLS2JIQlFhWGZwZ2lTbjRKSWcxcnJ3QXVIK3R2OU9BVmdOSAphS0dpanBaL3JOcVUzMjZSVUhLcStsRjY5dzJub0tzdWlhaDJ5OUJDbmNhOTRYMHdieXFiSlFWTExEOFFlazIrCjc0ZGgyZ05VdjNUMzRMQXA2TW9EQWdNQkFBR2pnYk13Z2JBd0RnWURWUjBQQVFIL0JBUURBZ1dnTUIwR0ExVWQKSlFRV01CUUdDQ3NHQVFVRkJ3TUJCZ2dyQmdFRkJRY0RBakFNQmdOVkhSTUJBZjhFQWpBQU1IRUdBMVVkRVFScQpNR2lDT1hKbGJHVmhjMlV0Ym1GdFpTMTJZWFZzZEMxelpXTnlaWFJ6TFhkbFltaHZiMnN1ZG5OM2FDNXpkbU11ClkyeDFjM1JsY2k1c2IyTmhiSUlyY21Wc1pXRnpaUzF1WVcxbExYWmhkV3gwTFhObFkzSmxkSE10ZDJWaWFHOXYKYXk1MmMzZG9Mbk4yWXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQWVvUEx2S01hVWl1K2ZQQjJjeUhyNjZqKwo2UENJa0Z0V3pINWNrS3hScWo1d3dMenJscHdLY3g0aE9PQnlHbzZsZ3ZMQ2p0NFVRZGh5cUNaK1BQUXFTUEJ4ClRSQnUydmIwRGtaUG80aW1pNjJjcm5mNHdZb1hEc3grSU1lVFdxa2ppVTJ1dmIxZHd3MUtyVEJNaFlLN01yRFcKdlk0NUFqREhpUGJ0M2pTTUx2ajF3b0t4ZnkyVFRnL3gzbGtjK3p6TUpXNGZFbzFnc0pKZ0Zwb1VJZGxBV0VBRwordjgzMXQzUE1qS3hJT2VXMXV2YlBJZUNCRGEzRWt4aFo4SHQ0WFN3NG92cWdEd1J1QldBWExMR2dVQUs0RVdNClpPWVBENmowTnBXOVl5aVBEWS9aM3dsMjcwOHRsRkNhbE9HYjFKR2FtcmlYdTVLVFlEeFJ1cVdZanBiUDNnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcEFJQkFBS0NBUUVBdlpBZGs5WG13M1E2WnN2RVYvbG5pVmxzekMwc2pqcjFRN1lNOEZGSmpYUVpiV2FMCnpJSzZRdlBaTDZrMFJkTFduR1ZBZUlKZDdMVDNLVE5ZbmRPQnRxdy9Ydk9DdTQxeDhCYUNkMTBaNWFNRHlxamcKeUFFbDBpVTc0SlJHUkRSN2pZMkRjVHRLSzhucDFlSzlpemRMUlJjZ090c0M5VjA4cDE3TjVaS1JUMFJoSGFqcApSVUJpQlF3ZDg2aTgyTksrZEd1THBTL2dTbldueFFMMXVUMy9qT0hOY05QbkRvQ2lteHdVR2wzNllJa3ArQ1NJCk5hNjhBTGgvcmIvVGdGWURSMmlob282V2Y2emFsTjl1a1ZCeXF2cFJldmNOcDZDckxvbW9kc3ZRUXAzR3ZlRjkKTUc4cW15VUZTeXcvRUhwTnZ1K0hZZG9EVkw5MDkrQ3dLZWpLQXdJREFRQUJBb0lCQVFDdVMrdVdPZkJUdVBQVgovdmdLdCt6R01tNUNFaXRNbjlOU0xmc1pvSFJUMXZObVR3cXR3V25JRS9TWHlTbWlKZWxrcGdpd2haWWRCb3ZYCjJ6bFk3TmZ4QWRIRzJYcFVQd3NMYVhjT2o1RTNQenRHUlI5aFp3VENnNi9ab0J3M3JGWUtZcHNBS3piWXFuQVMKVk1oWlVEOHFTTWcrdFkrejBjWHFVdFpZaHZxSytVeUNBang5SlVJRGNsWVRIU2cyMkI0SjRlS3EwMEp5Zyt0WQpWT1ZCWkVYeUg5OHM1OEtGM3dKbjdKK3RNd3hRcnFiTUJnaXlCYlVRc2x1eWdxUXdWajlUTVZOekNsb0VKWkVPCjdYdkV4dEgvNmpjc1Y0eGw3MGREUGRZRDdyeUN4MFdKa2Q5bXFwdUwyWU9mbUI1aWpZVlk5WVE3T0cxYk9Fb00KV3FuQkRGOXBBb0dCQU4xcFJlUEsrdHZUZGg4UlNPeGY1eFE2S3d1N1BBSndZd0N2OEtUbWZFZFJDSUpubG5UaQpBSGV5d3h0WmtKUEtVcDNJV2F0TEZ3czFGdXRWUFI3ZGJyejNyYWVZOWVPTG43SlJpc0cxK2QxdTVTaDd4UnRMClRvekNJZ0x4RnpwZkZsVUpkQnRSUkRVWnVUTkZnUVV6VmxMaTQwbGk4OC8wK0txd2Y5Ykcwb2xYQW9HQkFOc3QKS012RE1PS1ltUStMVjVBTStrYUQyYTNtSlh0Ty8zOWZRMmxCRWlCWGRJakQ1MEVNT0RkOHVHUU56TnJSWTErNQpuZzZacjRnbmVtemFsWjIvRnRjaWxLUXRYa1dEcDdnVmRIdldwbG02di9qb1hJelFwbDNaU2dKWE90RnJIWXBkCjlIOEs4RFFuV1Eyend4NWtLM2hiZlYvVW04c0MzZm4wZjdpbnFKMDFBb0dBWFluRysvaFp5SnJxY1MrVk5qOUIKMlhyRmlydzhHdSt0ODdGZ29kbTVzVXRiby9QdFRVM1pVcmhUMHU4Z3REOHFiZndoWGN0b1hkUzg3UWppdkhKaQpBVFZGeU9OSEppMXJkeU1aMHNKMVlBWWtpOWpXS2JURDU1VndWdnZSaTFoMmo5QmhtOVRXVXZTZUdEb0p5cytvCmJYWHEvYXJ2US9ERFNTRXRzT2ZvTkJzQ2dZRUFzSlJ4aWJoNGFoY0hPYjdKalFUbm5tZ2J1RDd6YzZUeHMyek0Kb3NBS0dvUmJIdFMyTzNIYzJOZGl0emxuRWVRZ2E3N2YyR041Ui9pR2FheXhYYVhXZ1AwYlJDcEpDVGhJcDhhaApVaVJkWVcxVHZQVjNtdnQvRFoxQ1F5Q0VBclNKMkRCYUN3Q0ZCWCt0LzV3VVZ5ZmMzZHJYNTUwaTV5d29LbmtSCmJYT21KUUVDZ1lCdVlHWlk4UlAweTV5R3BwaTZNRGc0OVI2Z2Y5Q01WYmV5MVF0S1RwQ2xJSmRuU0dGM3prSVUKNC9ONlVUS1F3Y2hvcERvd01NSCtyYU1mNE5jNi9kbVhKQi9JdDVZcVpRdU5xbUlWVk4wMytvU3hFbEp2NmtnVApZQnQ0ZDFOSWpWM1hJYTVJVzlOaFBLWWZGTWFtMG1MQUpjNS90dGdqSVo1emZodlVHSGd0ZkE9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+  ca.crt:  LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5ekNDQWQrZ0F3SUJBZ0lSQU5USUU0Z1Z1c2dhT2JrbTB3dEtqNVF3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2MzWmpMV05oZEMxallUQWVGdzB4T1RFeE1EWXhOakF6TVRsYUZ3MHlPVEV4TURNeApOakF6TVRsYU1CVXhFekFSQmdOVkJBTVRDbk4yWXkxallYUXRZMkV3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBCkE0SUJEd0F3Z2dFS0FvSUJBUURTK2lHVk1MWFZheXFhMWJFbjR6a0M1MVJiREpDaW11NnJqWFdoUEhlZ0lJMUgKUlRLeS9qajBsMXkvWnpJZXFxcHBtZDhNQzAxaEpJSFlqYkZPWnhOTjNoeEF4L3lFYWhBNGdYRGV1Ym54YjkrUwowUE91NnF2RDRyc1JPbkorblJia0E0TnA0SklIMTNPNldqdWM4WU9BTUFNcEd1ZjROSDNPY2h4YXpnRnMyTGlNCm03bzZZbTg4Yzhwb2J3cmJQT2U4aTAycDA2VWQrcDFWUmhhVEZJdlRNdTk5K0hxalorNzNQV1BwVnAvSGc3OGUKTTdzMWxtMXQxbTVWWXVEbm5yVW10WHR5Nk8zTWtEVWdEKzNyeHdqSzcvbFduUmI0UlNEUm1SbHc3cFc2Qm5ndgpwaDdPSC9QZWRFbTN6aGNicG1GaWduUUxkU2hPYTJuZkM0ZWdYQUJSQWdNQkFBR2pRakJBTUE0R0ExVWREd0VCCi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXdEd1lEVlIwVEFRSC8KQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBR1lzWFpTSzB2MzdhM3dnOVJqTEZQL01FOE9ubQp0Ym9XdStGakxnZXV5VTM4NkVnaURzd2tDRUhQVDBSellhYVhOZC9qQmJ2ZWpVWGtQdjh2T1ZhWm93ZnBXTVZaCjRMeVBKY2c1QjExb3FLd1dOcDlUWU1UYTBYSDZhY3duQjN6R3pYUGhSaVZxK0lRSlZHdTRGSWFzNkl2N1ZFcVMKbk5YVldKKy8zenNjZ3B6cU1vRWgyN2lhdEdDVDdRRGRFTDlaM2hCTVBhMWN4UGVNSklySDFUeEcxYnl2ZG45aApzRXRuRGkwVVFVV3kxMzdITUEybXR6RVpkZFpxb01CT0J2Y1hON096eWNBUG9jZ1AremhyNjlPWnd1OUxIaW9ECnpRL1pEaWpHR1BNblIyM2VQd1VSMHJtU3h4WE5abHhFTVNCOHdJZFlvb1lMZWlRaWRIV0I3cml3TXc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: release-name-vault-secrets-webhook
+  namespace: vswh
+webhooks:
+- name: pods.vault-secrets-webhook.admission.banzaicloud.com
+  clientConfig:
+    service:
+      namespace: vswh
+      name: release-name-vault-secrets-webhook
+      path: /pods
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5ekNDQWQrZ0F3SUJBZ0lSQU5USUU0Z1Z1c2dhT2JrbTB3dEtqNVF3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2MzWmpMV05oZEMxallUQWVGdzB4T1RFeE1EWXhOakF6TVRsYUZ3MHlPVEV4TURNeApOakF6TVRsYU1CVXhFekFSQmdOVkJBTVRDbk4yWXkxallYUXRZMkV3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBCkE0SUJEd0F3Z2dFS0FvSUJBUURTK2lHVk1MWFZheXFhMWJFbjR6a0M1MVJiREpDaW11NnJqWFdoUEhlZ0lJMUgKUlRLeS9qajBsMXkvWnpJZXFxcHBtZDhNQzAxaEpJSFlqYkZPWnhOTjNoeEF4L3lFYWhBNGdYRGV1Ym54YjkrUwowUE91NnF2RDRyc1JPbkorblJia0E0TnA0SklIMTNPNldqdWM4WU9BTUFNcEd1ZjROSDNPY2h4YXpnRnMyTGlNCm03bzZZbTg4Yzhwb2J3cmJQT2U4aTAycDA2VWQrcDFWUmhhVEZJdlRNdTk5K0hxalorNzNQV1BwVnAvSGc3OGUKTTdzMWxtMXQxbTVWWXVEbm5yVW10WHR5Nk8zTWtEVWdEKzNyeHdqSzcvbFduUmI0UlNEUm1SbHc3cFc2Qm5ndgpwaDdPSC9QZWRFbTN6aGNicG1GaWduUUxkU2hPYTJuZkM0ZWdYQUJSQWdNQkFBR2pRakJBTUE0R0ExVWREd0VCCi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXdEd1lEVlIwVEFRSC8KQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBR1lzWFpTSzB2MzdhM3dnOVJqTEZQL01FOE9ubQp0Ym9XdStGakxnZXV5VTM4NkVnaURzd2tDRUhQVDBSellhYVhOZC9qQmJ2ZWpVWGtQdjh2T1ZhWm93ZnBXTVZaCjRMeVBKY2c1QjExb3FLd1dOcDlUWU1UYTBYSDZhY3duQjN6R3pYUGhSaVZxK0lRSlZHdTRGSWFzNkl2N1ZFcVMKbk5YVldKKy8zenNjZ3B6cU1vRWgyN2lhdEdDVDdRRGRFTDlaM2hCTVBhMWN4UGVNSklySDFUeEcxYnl2ZG45aApzRXRuRGkwVVFVV3kxMzdITUEybXR6RVpkZFpxb01CT0J2Y1hON096eWNBUG9jZ1AremhyNjlPWnd1OUxIaW9ECnpRL1pEaWpHR1BNblIyM2VQd1VSMHJtU3h4WE5abHhFTVNCOHdJZFlvb1lMZWlRaWRIV0I3cml3TXc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  rules:
+  - operations:
+    - CREATE
+    apiGroups:
+    - "*"
+    apiVersions:
+    - "*"
+    resources:
+    - pods
+  failurePolicy: Ignore
+  namespaceSelector:
+    matchExpressions:
+    - key: name
+      operator: NotIn
+      values:
+      - kube-system
+
+    - key: name
+      operator: NotIn
+      values:
+      - vswh
+- name: secrets.vault-secrets-webhook.admission.banzaicloud.com
+  clientConfig:
+    service:
+      namespace: vswh
+      name: release-name-vault-secrets-webhook
+      path: /secrets
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5ekNDQWQrZ0F3SUJBZ0lSQU5USUU0Z1Z1c2dhT2JrbTB3dEtqNVF3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2MzWmpMV05oZEMxallUQWVGdzB4T1RFeE1EWXhOakF6TVRsYUZ3MHlPVEV4TURNeApOakF6TVRsYU1CVXhFekFSQmdOVkJBTVRDbk4yWXkxallYUXRZMkV3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBCkE0SUJEd0F3Z2dFS0FvSUJBUURTK2lHVk1MWFZheXFhMWJFbjR6a0M1MVJiREpDaW11NnJqWFdoUEhlZ0lJMUgKUlRLeS9qajBsMXkvWnpJZXFxcHBtZDhNQzAxaEpJSFlqYkZPWnhOTjNoeEF4L3lFYWhBNGdYRGV1Ym54YjkrUwowUE91NnF2RDRyc1JPbkorblJia0E0TnA0SklIMTNPNldqdWM4WU9BTUFNcEd1ZjROSDNPY2h4YXpnRnMyTGlNCm03bzZZbTg4Yzhwb2J3cmJQT2U4aTAycDA2VWQrcDFWUmhhVEZJdlRNdTk5K0hxalorNzNQV1BwVnAvSGc3OGUKTTdzMWxtMXQxbTVWWXVEbm5yVW10WHR5Nk8zTWtEVWdEKzNyeHdqSzcvbFduUmI0UlNEUm1SbHc3cFc2Qm5ndgpwaDdPSC9QZWRFbTN6aGNicG1GaWduUUxkU2hPYTJuZkM0ZWdYQUJSQWdNQkFBR2pRakJBTUE0R0ExVWREd0VCCi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXdEd1lEVlIwVEFRSC8KQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBR1lzWFpTSzB2MzdhM3dnOVJqTEZQL01FOE9ubQp0Ym9XdStGakxnZXV5VTM4NkVnaURzd2tDRUhQVDBSellhYVhOZC9qQmJ2ZWpVWGtQdjh2T1ZhWm93ZnBXTVZaCjRMeVBKY2c1QjExb3FLd1dOcDlUWU1UYTBYSDZhY3duQjN6R3pYUGhSaVZxK0lRSlZHdTRGSWFzNkl2N1ZFcVMKbk5YVldKKy8zenNjZ3B6cU1vRWgyN2lhdEdDVDdRRGRFTDlaM2hCTVBhMWN4UGVNSklySDFUeEcxYnl2ZG45aApzRXRuRGkwVVFVV3kxMzdITUEybXR6RVpkZFpxb01CT0J2Y1hON096eWNBUG9jZ1AremhyNjlPWnd1OUxIaW9ECnpRL1pEaWpHR1BNblIyM2VQd1VSMHJtU3h4WE5abHhFTVNCOHdJZFlvb1lMZWlRaWRIV0I3cml3TXc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  rules:
+  - operations:
+    - CREATE
+    - UPDATE
+    apiGroups:
+    - "*"
+    apiVersions:
+    - "*"
+    resources:
+    - secrets
+  failurePolicy: Ignore
+  namespaceSelector:
+    matchExpressions:
+    - key: name
+      operator: NotIn
+      values:
+      - kube-system
+
+    - key: name
+      operator: NotIn
+      values:
+      - vswh
+  sideEffects: NoneOnDryRun
+
+---
+# Source: vault-secrets-webhook/templates/webhook-rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: vswh
+  name: release-name-vault-secrets-webhook
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: release-name-vault-secrets-webhook
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - configmaps
+    verbs:
+      - "get"
+      - "update"
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - "create"
+      - "update"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: release-name-vault-secrets-webhook-limited
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: release-name-vault-secrets-webhook
+subjects:
+- kind: ServiceAccount
+  namespace: vswh
+  name: release-name-vault-secrets-webhook
+
+---
+# Source: vault-secrets-webhook/templates/webhook-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-vault-secrets-webhook
+  namespace: vswh
+  labels:
+    helm.sh/chart: vault-secrets-webhook-0.5.5
+    app.kubernetes.io/name: release-name-vault-secrets-webhook
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/component: mutating-webhook
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: 8443
+      protocol: TCP
+      name: vault-secrets-webhook
+  selector:
+    app.kubernetes.io/name: vault-secrets-webhook
+    app.kubernetes.io/instance: release-name
+
+---
+# Source: vault-secrets-webhook/templates/webhook-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-vault-secrets-webhook
+  namespace: vswh
+  labels:
+    helm.sh/chart: vault-secrets-webhook-0.5.5
+    app.kubernetes.io/name: vault-secrets-webhook
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/component: mutating-webhook
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vault-secrets-webhook
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vault-secrets-webhook
+        app.kubernetes.io/instance: release-name
+      annotations:
+        checksum/config: b93c0f8f3df4e59a8305c4f068ca249bb1987eb7dd22809e39d01963fd245aba
+    spec:
+      serviceAccountName: release-name-vault-secrets-webhook
+      volumes:
+        - name: serving-cert
+          secret:
+            defaultMode: 420
+            secretName: release-name-vault-secrets-webhook
+      containers:
+        - name: vault-secrets-webhook
+          image: "banzaicloud/vault-secrets-webhook:0.5.1"
+          env:
+            - name: TLS_CERT_FILE
+              value: /var/serving-cert/tls.crt
+            - name: TLS_PRIVATE_KEY_FILE
+              value: /var/serving-cert/tls.key
+            - name: LISTEN_ADDRESS
+              value: ":8443"
+            - name: DEBUG
+              value: "false"
+            - name: VAULT_ENV_IMAGE
+              value: "banzaicloud/vault-env:latest"
+            - name: VAULT_IMAGE
+              value: "vault:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8443
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: 8443
+          volumeMounts:
+            - mountPath: /var/serving-cert
+              name: serving-cert
+          securityContext:
+            runAsUser: 65534
+            allowPrivilegeEscalation: false
+          resources:
+            {}
+
+
+---
+# Source: vault-secrets-webhook/templates/prometheus-monitorservice.yaml
+
+
+---
+# Source: vault-secrets-webhook/templates/webhook-psp.yaml

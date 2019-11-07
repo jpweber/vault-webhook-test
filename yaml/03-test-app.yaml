@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-secrets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-secrets
+  template:
+    metadata:
+      labels:
+        app: hello-secrets
+      annotations:
+        vault.security.banzaicloud.io/vault-addr: "http://vault.vault:8200"
+        #vault.security.banzaicloud.io/vault-tls-secret: "vault-tls"
+        vault.security.banzaicloud.io/role: "vswh-vault-secrets-webhook"
+    spec:
+      serviceAccountName: vswh-vault-secrets-webhook
+      containers:
+      - name: nginx
+        image: nginx
+        env:
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "vault:secret/data/accounts/aws#AWS_SECRET_ACCESS_KEY"
